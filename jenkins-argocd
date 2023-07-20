@@ -1,0 +1,32 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: jenkins-argocd
+  region: us-west-2
+
+vpc:
+  id: "vpc-008dd2f0293eade92"
+  cidr: "172.31.0.0/16"
+  subnets:
+    public:
+      us-west-2a: { id: subnet-0de6c9b304a2762c7 }
+      us-west-2b: { id: subnet-0ec3db041a0e06222 }
+      us-west-2c: { id: subnet-013927d5402d56f41 }
+
+managedNodeGroups:
+  - name: ng-db
+    instanceType: t3.small
+    labels: { role: builders }
+    minSize: 2
+    maxSize: 4
+    tags:
+      Name: ng-db
+  - name: ng-spot
+    instanceType: t3.medium
+    labels: { role: builders }
+    minSize: 3
+    maxSize: 6
+    spot: true
+    tags:
+      Name: ng-spot
